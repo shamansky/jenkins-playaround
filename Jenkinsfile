@@ -1,25 +1,12 @@
 pipeline {
-    agent any
-    tools {
-        maven 'Maven 3.2.2' 
+    agent {
+        docker { image 'node:14-alpine' }
     }
-    stages{
-        stage('Verify Branch') {
+    stages {
+        stage('Test') {
             steps {
-                echo "$GIT_BRANCH"
+                sh 'node --version'
             }
-        }
-        stage('Docker Build') {
-           steps {
-              pwsh(script: 'docker images -a')
-              pwsh(script: """
-              cd azure-vote/
-              docker images -a
-              docker build -t jenkins-pipeline .
-              docker images -a
-              cd ..
-              """)
-           }
         }
     }
 }
